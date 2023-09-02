@@ -2,11 +2,12 @@ import { MantineProvider } from '@mantine/core'
 import './App.css'
 import Book from './components/book'
 import Header from './components/common/Header'
-import { BookProvider } from './context/BookContext'
-import { QuestProvider } from './context/QuestContext'
+import { BookProvider } from './contexts/BookContext'
+import { QuestProvider } from './contexts/QuestContext'
 import { Notifications } from '@mantine/notifications'
 import { ModalsProvider } from '@mantine/modals'
-import { PomodoroProvider } from './context/PomodoroContext'
+import { PomodoroProvider } from './contexts/PomodoroContext'
+import { LogProvider } from './contexts/LogContext'
 
 function App() {
   return (
@@ -21,10 +22,12 @@ function App() {
       <ModalsProvider>
         <BookProvider>
           <QuestProvider>
-            <PomodoroProvider>
-              <Header></Header>
-              <Book></Book>
-            </PomodoroProvider>
+            <LogProvider>
+              <PomodoroProvider>
+                <Header></Header>
+                <Book></Book>
+              </PomodoroProvider>
+            </LogProvider>
           </QuestProvider>
         </BookProvider>
       </ModalsProvider>

@@ -1,6 +1,6 @@
 import React, { LegacyRef } from 'react'
 import Page from '../layouts/Page'
-import Timer from '../parts/Timer'
+import Timer from '../parts/pomodoro/Timer'
 
 interface Props {
   number: number

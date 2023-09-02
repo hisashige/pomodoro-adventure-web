@@ -1,18 +1,26 @@
-import React, { LegacyRef, useEffect, useState } from 'react'
-import QuestItem from '../parts/QuestItem'
-import { Quest, useQuestContext } from '../../../context/QuestContext'
+import React, { LegacyRef, useEffect, useMemo, useState } from 'react'
+import QuestItem from '../parts/questList/QuestItem'
+import { Quest, useQuestContext } from '../../../contexts/QuestContext'
 import Page from '../layouts/Page'
 import { ActionIcon, Button, Group, Text } from '@mantine/core'
 import { IconCheck, IconDeviceFloppy, IconEdit, IconPlus, IconX } from '@tabler/icons-react'
 import { notifications } from '@mantine/notifications'
+import { usePomodoroContext } from '../../../contexts/PomodoroContext'
+import Enemy from '../parts/questList/Enemy'
+import { createId } from '../../../libs/dataUtils'
 
 interface Props {
   number: number
 }
 
 export default React.forwardRef(({ number }: Props, ref: LegacyRef<HTMLDivElement>) => {
+  const { isRunning } = usePomodoroContext()
   const { questList, setQuestList, isEdit, setIsEdit } = useQuestContext()
   const [editQuestList, setEditQuestList] = useState(questList)
+  const aliveQuestList = useMemo(
+    () => editQuestList.filter((item) => !item.delete),
+    [editQuestList]
+  )
 
   useEffect(() => {
     if (questList.length < 1) {
@@ -29,25 +37,25 @@ export default React.forwardRef(({ number }: Props, ref: LegacyRef<HTMLDivElemen
   }
 
   const handleDelete = (questId: number) => {
-    const updatedQuestList = editQuestList.filter((item) => item.id !== questId)
+    const updatedQuestList = editQuestList.map((item) =>
+      item.id === questId ? { ...item, delete: true } : item
+    )
+    console.log('delete', updatedQuestList, questId)
     setEditQuestList(updatedQuestList)
   }
 
   const handleAddQuest = () => {
-    const newQuestId =
-      editQuestList.length > 0 ? Math.max(...editQuestList.map((item) => item.id)) + 1 : 0
-    const newQuest: Quest = { id: newQuestId, name: '', elapsedMinutes: 0 }
+    const newQuestId = createId(editQuestList)
+    const newQuest: Quest = { id: newQuestId, name: '', elapsedMinutes: 0, delete: false }
     setEditQuestList([...editQuestList, newQuest])
   }
 
   const handleSaveAll = () => {
-    const validateErrors = editQuestList.filter(
-      (item) => item.name === '' || item.name.length > 100
-    )
+    const validateErrors = editQuestList.filter((item) => item.name === '' || item.name.length > 30)
     if (validateErrors.length > 0) {
       notifications.show({
         title: <Text weight="bold">保存に失敗しました。</Text>,
-        message: `タスク名は1~100文字以内で入力してください。`,
+        message: `クエスト名は1~30文字以内で入力してください。`,
         color: 'red',
         icon: <IconX size="1.2rem" />,
       })
@@ -56,7 +64,7 @@ export default React.forwardRef(({ number }: Props, ref: LegacyRef<HTMLDivElemen
     if (editQuestList.length < 1) {
       notifications.show({
         title: <Text weight="bold">保存に失敗しました。</Text>,
-        message: `タスクは１件以上登録してください。`,
+        message: `クエストは１件以上登録してください。`,
         color: 'red',
         icon: <IconX size="1.2rem" />,
       })
@@ -66,13 +74,13 @@ export default React.forwardRef(({ number }: Props, ref: LegacyRef<HTMLDivElemen
     setIsEdit(false)
     notifications.show({
       title: <Text weight="bold">更新</Text>,
-      message: `タスクの設定を更新しました。`,
+      message: `クエストの設定を更新しました。`,
       color: 'teal',
       icon: <IconCheck size="1.2rem" />,
     })
   }
 
-  const canselEdit = () => {
+  const cancelEdit = () => {
     setEditQuestList(questList)
     setIsEdit(false)
   }
@@ -84,49 +92,61 @@ export default React.forwardRef(({ number }: Props, ref: LegacyRef<HTMLDivElemen
     }
   }
 
-  return (
-    <div className="page" ref={ref}>
-      <Page number={number} header="Quest List">
-        {isEdit ? (
+  const ButtonArea = () => {
+    if (!isRunning) {
+      if (isEdit) {
+        return (
           <Group position="center">
             <Button radius="lg" onClick={handleSaveAll}>
               <IconDeviceFloppy />
               保存
             </Button>
-            <Button radius="lg" variant="outline" onClick={canselEdit}>
+            <Button radius="lg" variant="outline" onClick={cancelEdit}>
               キャンセル
             </Button>
           </Group>
-        ) : (
+        )
+      } else {
+        return (
           <Group position="right">
             <Button radius="lg" variant="outline" onClick={onEditable}>
               <IconEdit />
               編集
             </Button>
           </Group>
-        )}
+        )
+      }
+    }
+  }
 
-        {editQuestList.map((quest) => {
-          const oldQuest = questList.find((oldQuest) => oldQuest.id === quest.id)
+  return (
+    <div className="page" ref={ref}>
+      <Page number={number} header="Quest List">
+        <ButtonArea />
+
+        {aliveQuestList.map((quest) => {
+          const storedQuest = questList.find((fixQuest) => fixQuest.id === quest.id)
           return (
             <QuestItem
               key={quest.id}
-              oldQuest={oldQuest}
+              storedQuest={storedQuest}
               editQuest={quest}
-              onNameChange={handleNameChange}
+              onChangeName={handleNameChange}
               onDelete={handleDelete}
               isEdit={isEdit}
             />
           )
         })}
 
-        {isEdit && editQuestList.length < 5 && (
+        {isEdit && aliveQuestList.length < 5 && (
           <Group position="right" pr={30}>
             <ActionIcon variant="filled" radius="lg" onClick={handleAddQuest}>
               <IconPlus />
             </ActionIcon>
           </Group>
         )}
+
+        {!isEdit && <Enemy isRunning={isRunning}></Enemy>}
       </Page>
     </div>
   )

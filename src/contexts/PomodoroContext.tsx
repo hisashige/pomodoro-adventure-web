@@ -1,9 +1,5 @@
 import { createContext, useContext, ReactNode, useState } from 'react'
 
-export interface Pomodoro {
-  isRunning: boolean
-  volume: number
-}
 type PomodoroContext = {
   isRunning: boolean
   setIsRunning: React.Dispatch<React.SetStateAction<boolean>>

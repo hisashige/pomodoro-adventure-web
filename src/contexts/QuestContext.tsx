@@ -4,6 +4,7 @@ export interface Quest {
   id: number
   name: string
   elapsedMinutes: number
+  delete: boolean
 }
 type QuestContext = {
   questList: Quest[]

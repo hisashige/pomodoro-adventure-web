@@ -1,4 +1,4 @@
-export const POMODORO_TIME = 1500
+export const POMODORO_TIME = 60
 
 export const SOUNDS = [
   {

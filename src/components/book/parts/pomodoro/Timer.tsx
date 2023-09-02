@@ -1,25 +1,60 @@
-import { useTimer } from 'react-timer-hook'
-import { Text, Paper, Container, Button, Center } from '@mantine/core'
-import Player from './Player'
 import { useEffect, useState } from 'react'
-import ReactHowler from 'react-howler'
-import { POMODORO_TIME } from '../../../consts'
-import { useQuestContext } from '../../../context/QuestContext'
+import { Text, Paper, Container, Button, Center } from '@mantine/core'
+import { useTimer } from 'react-timer-hook'
+import Player from './Player'
+import { POMODORO_TIME } from '../../../../consts'
+import { useQuestContext } from '../../../../contexts/QuestContext'
 import { modals } from '@mantine/modals'
 import { notifications } from '@mantine/notifications'
 import { IconX } from '@tabler/icons-react'
-import { usePomodoroContext } from '../../../context/PomodoroContext'
+import { usePomodoroContext } from '../../../../contexts/PomodoroContext'
+import { getHowl } from '../../../../libs/howler'
+import { useLogContext } from '../../../../contexts/LogContext'
 
 export default function Timer() {
   const { questList, setQuestList, selectedQuestId, isEdit } = useQuestContext()
   const { isRunning, setIsRunning, volume } = usePomodoroContext()
+  const { createLog, doneLog } = useLogContext()
   const [isFinished, setIsFinished] = useState(false)
   const [isPaused, setIsPaused] = useState(false)
-  const [isCountUp, setIsCountUp] = useState(false)
+  const [isCountDown, setIsCountDown] = useState(false)
   const [countNum, setCountNum] = useState(3)
+  const [isFadeOut, setIsFadeOut] = useState(false)
+
+  // カウントダウン音
+  const [howl] = useState(getHowl('countdown.mp3', volume))
+  useEffect(() => {
+    if (isCountDown) {
+      howl.play()
+    } else {
+      howl.stop()
+    }
+  }, [isCountDown])
+  useEffect(() => {
+    howl.volume(volume / 100)
+  }, [volume])
 
   const initianExpiryTimestamp = new Date()
   initianExpiryTimestamp.setSeconds(initianExpiryTimestamp.getSeconds() + POMODORO_TIME)
+
+  const onTimerExpire = () => {
+    setIsFinished(true)
+    const targetIndex = questList.findIndex((item) => item.id === selectedQuestId)
+    if (targetIndex !== -1) {
+      const updatedQuestList = structuredClone(questList)
+      updatedQuestList[targetIndex].elapsedMinutes =
+        updatedQuestList[targetIndex].elapsedMinutes + Math.round(POMODORO_TIME / 60)
+      setQuestList(updatedQuestList)
+      doneLog()
+    } else {
+      notifications.show({
+        title: <Text weight="bold">達成データの作成に失敗しました。</Text>,
+        message: `選択されているクエストが見つからなかったため、達成データを追加できませんでした。`,
+        color: 'red',
+        icon: <IconX size="1.2rem" />,
+      })
+    }
+  }
 
   const {
     seconds,
@@ -31,26 +66,20 @@ export default function Timer() {
     restart,
   } = useTimer({
     expiryTimestamp: initianExpiryTimestamp,
-    onExpire: () => {
-      setIsFinished(true)
-      const targetIndex = questList.findIndex((item) => item.id === selectedQuestId)
-      if (targetIndex !== -1) {
-        questList[targetIndex].elapsedMinutes = POMODORO_TIME / 60
-        setQuestList(questList)
-      } else {
-        notifications.show({
-          title: <Text weight="bold">達成データの作成に失敗しました。</Text>,
-          message: `選択されているクエストが見つからなかったため、達成データを追加できませんでした。`,
-          color: 'red',
-          icon: <IconX size="1.2rem" />,
-        })
-      }
-    },
+    onExpire: onTimerExpire,
     autoStart: false,
   })
   useEffect(() => {
     setIsRunning(isTimerRunning)
   }, [isTimerRunning])
+  useEffect(() => {
+    if (minutes === 0 && seconds === 3) {
+      setIsFadeOut(true)
+      startCountDown()
+    } else if (seconds === 0) {
+      setIsFadeOut(false)
+    }
+  }, [seconds])
 
   const startTimer = () => {
     if (isEdit) {
@@ -79,21 +108,41 @@ export default function Timer() {
       })
       return
     }
-    setIsCountUp(true)
+    startCountDown(start)
+    createLog()
+  }
+
+  const restartTimer = () => {
+    const restartExpiryTimestamp = new Date()
+    restartExpiryTimestamp.setSeconds(restartExpiryTimestamp.getSeconds() + POMODORO_TIME + 3)
+    setIsFinished(false)
+    startCountDown(() => restart(restartExpiryTimestamp))
+    createLog()
+  }
+
+  const startCountDown = (callback?: () => void) => {
+    setIsCountDown(true)
     const countInterval = setInterval(() => {
       setCountNum((prev) => prev - 1)
     }, 1000)
     setTimeout(() => {
-      start()
-      setIsCountUp(false)
+      if (callback) callback()
+      setIsCountDown(false)
       clearInterval(countInterval)
+      setCountNum(3)
     }, 3000)
   }
 
   const padingZero = (num: number) => ('00' + num).slice(-2)
 
   function ButtonArea() {
-    if (isRunning) {
+    if (isCountDown) {
+      return (
+        <Button variant="gradient" disabled>
+          カウントダウン中
+        </Button>
+      )
+    } else if (isRunning) {
       return (
         <Button
           onClick={() => {
@@ -110,12 +159,7 @@ export default function Timer() {
       if (isFinished) {
         return (
           <Button
-            onClick={() => {
-              const restartExpiryTimestamp = new Date()
-              restartExpiryTimestamp.setSeconds(restartExpiryTimestamp.getSeconds() + POMODORO_TIME)
-              setIsFinished(false)
-              restart(restartExpiryTimestamp)
-            }}
+            onClick={restartTimer}
             variant="gradient"
             gradient={{ from: 'orange', to: 'red' }}
           >
@@ -137,6 +181,7 @@ export default function Timer() {
           </Button>
         )
       }
+
       return (
         <Button
           onClick={startTimer}
@@ -159,7 +204,7 @@ export default function Timer() {
       if (isPaused) {
         return '一時停止中...'
       }
-      if (isCountUp) {
+      if (isCountDown && !isFadeOut) {
         return 'Are you ready?'
       }
       return '待機中'
@@ -168,10 +213,8 @@ export default function Timer() {
 
   return (
     <>
-      <ReactHowler src={'sounds/countdown.mp3'} playing={isCountUp} volume={volume / 100} />
-
       <Paper withBorder radius="md" p="xs" m="xs">
-        <Player playing={isRunning} isFinished={isFinished}></Player>
+        <Player playing={isRunning} isFadeOut={isFadeOut} isFinished={isFinished}></Player>
       </Paper>
       <Paper withBorder radius="md" p="xs" m="xs">
         <Center>
@@ -182,7 +225,7 @@ export default function Timer() {
         <Center>
           <Container size={500}>
             <Text weight={400} size={100}>
-              {isCountUp ? (
+              {isCountDown && !isFadeOut ? (
                 countNum
               ) : (
                 <>

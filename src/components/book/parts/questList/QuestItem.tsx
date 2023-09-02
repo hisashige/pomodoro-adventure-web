@@ -1,22 +1,20 @@
 import { Checkbox, Grid, Group, Paper, TextInput, Text, ActionIcon } from '@mantine/core'
-import React, { useState } from 'react'
-import { useQuestContext } from '../../../context/QuestContext'
+import React, { useMemo, useState } from 'react'
+import { Quest, useQuestContext } from '../../../../contexts/QuestContext'
 import { IconBackspace } from '@tabler/icons-react'
-
-interface Quest {
-  id: number
-  name: string
-}
+import { usePomodoroContext } from '../../../../contexts/PomodoroContext'
+import { POMODORO_TIME } from '../../../../consts'
 
 interface Props {
-  oldQuest: Quest | undefined
+  storedQuest: Quest | undefined
   editQuest: Quest
-  onNameChange: (questId: number, newName: string) => void
+  onChangeName: (questId: number, newName: string) => void
   onDelete: (questId: number) => void
   isEdit: boolean
 }
 
-const QuestItem: React.FC<Props> = ({ oldQuest, editQuest, onNameChange, onDelete, isEdit }) => {
+const QuestItem: React.FC<Props> = ({ storedQuest, editQuest, onChangeName, onDelete, isEdit }) => {
+  const { isRunning } = usePomodoroContext()
   const { selectedQuestId, setSelectedQuestId } = useQuestContext()
   const [name, setName] = useState(editQuest.name)
 
@@ -28,14 +26,21 @@ const QuestItem: React.FC<Props> = ({ oldQuest, editQuest, onNameChange, onDelet
     }
   }
 
-  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value)
-    onNameChange(editQuest.id, e.target.value)
+    onChangeName(editQuest.id, e.target.value)
   }
 
   const handleDelete = () => {
     onDelete(editQuest.id)
   }
+
+  const levelLabel = useMemo(() => {
+    const level = storedQuest
+      ? Math.round(storedQuest.elapsedMinutes / (POMODORO_TIME / 60)) + 1
+      : 'NaN'
+    return `Level:${level}`
+  }, [storedQuest])
 
   return (
     <Paper withBorder radius="md" p="xs" m="xs">
@@ -44,9 +49,10 @@ const QuestItem: React.FC<Props> = ({ oldQuest, editQuest, onNameChange, onDelet
           <>
             <Grid.Col span={10}>
               <TextInput
-                placeholder="タスク名"
+                placeholder="クエスト名"
                 value={editQuest.name}
-                onChange={handleNameChange}
+                onChange={handleChangeName}
+                maxLength={30}
               />
             </Grid.Col>
             <Grid.Col span={1}>
@@ -60,7 +66,7 @@ const QuestItem: React.FC<Props> = ({ oldQuest, editQuest, onNameChange, onDelet
                 >
                   <IconBackspace />
                 </ActionIcon>
-                {oldQuest && oldQuest.name === name}
+                {storedQuest && storedQuest.name === name}
               </Group>
             </Grid.Col>
           </>
@@ -71,10 +77,16 @@ const QuestItem: React.FC<Props> = ({ oldQuest, editQuest, onNameChange, onDelet
                 styles={{ body: { justifyContent: 'center' } }}
                 onChange={selectQuest}
                 checked={!isEmpty && editQuest.id === selectedQuestId}
+                disabled={isRunning}
               />
             </Grid.Col>
-            <Grid.Col span={11}>
+            <Grid.Col span={9}>
               <Text>{editQuest.name}</Text>
+            </Grid.Col>
+            <Grid.Col span={2}>
+              <Text fw={500} fs="italic">
+                {levelLabel}
+              </Text>
             </Grid.Col>
           </>
         )}

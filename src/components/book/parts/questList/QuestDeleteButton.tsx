@@ -10,11 +10,11 @@ interface Props {
 export function QuestDeleteButton({ questName, disabled, deleteQuest }: Props) {
   const openModal = () =>
     modals.openConfirmModal({
-      title: <Text weight="bold">{`タスク「${questName}」を本当に削除しますか？`}</Text>,
+      title: <Text weight="bold">{`クエスト「${questName}」を本当に削除しますか？`}</Text>,
       centered: true,
       children: (
         <Text size="sm">
-          ・タスクを削除すると、これまでのデータは全て削除されます。
+          ・クエストを削除すると、これまでのデータは全て削除されます。
           <br />
           ・別の編集中のデータがある場合、保存されていないデータは失われます。保存してから実行してください。
         </Text>
