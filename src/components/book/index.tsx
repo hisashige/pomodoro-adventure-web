@@ -6,6 +6,8 @@ import FrontCover from './pages/FrontCover'
 import BackCover from './pages/BackCover'
 import Pomodoro from './pages/Pomodoro'
 import QuestList from './pages/QuestList'
+import Log from './pages/Log'
+import Status from './pages/Status'
 
 const Book: React.FC = () => {
   const { bookRef, toNextPage, toPrevPage, onPage, onChangeOrientation, onChangePageState } =
@@ -36,6 +38,8 @@ const Book: React.FC = () => {
           {/* ページコンテンツ */}
           <Pomodoro number={1} />
           <QuestList number={2} />
+          <Log number={3} />
+          <Status number={4} />
           {/* 裏表紙 */}
           <BackCover toPrevPage={toPrevPage} />
         </HTMLFlipBook>

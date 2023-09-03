@@ -3,7 +3,7 @@ import React, { useMemo, useState } from 'react'
 import { Quest, useQuestContext } from '../../../../contexts/QuestContext'
 import { IconBackspace } from '@tabler/icons-react'
 import { usePomodoroContext } from '../../../../contexts/PomodoroContext'
-import { POMODORO_TIME } from '../../../../consts'
+import { level } from '../../../../libs/dataUtils'
 
 interface Props {
   storedQuest: Quest | undefined
@@ -36,10 +36,8 @@ const QuestItem: React.FC<Props> = ({ storedQuest, editQuest, onChangeName, onDe
   }
 
   const levelLabel = useMemo(() => {
-    const level = storedQuest
-      ? Math.round(storedQuest.elapsedMinutes / (POMODORO_TIME / 60)) + 1
-      : 'NaN'
-    return `Level:${level}`
+    const label = storedQuest ? level(storedQuest) : 'NaN'
+    return `Level:${label}`
   }, [storedQuest])
 
   return (

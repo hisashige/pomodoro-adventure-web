@@ -23,9 +23,9 @@ export default function Enemy({ isRunning }: Props) {
     setEnemy(e.target.value)
   }
   const recentlyLogs = useMemo(() => {
-    const filteredLogs = logs.filter((log) => log.enemy !== '')
-    filteredLogs.sort((a, b) => b.id - a.id)
-    filteredLogs.slice(0, 5)
+    let filteredLogs = logs.filter((log) => log.enemy !== '')
+    filteredLogs = filteredLogs.sort((a, b) => b.id - a.id)
+    filteredLogs = filteredLogs.slice(0, 5)
     return filteredLogs
   }, [logs])
 
@@ -60,7 +60,9 @@ export default function Enemy({ isRunning }: Props) {
           <List size="sm" spacing={5}>
             {recentlyLogs.map((log) => (
               <List.Item key={log.id}>
-                <UnstyledButton onClick={() => setEnemy(log.enemy)}>{log.enemy}</UnstyledButton>
+                <UnstyledButton onClick={() => setEnemy(log.enemy)} disabled={isRunning}>
+                  {log.enemy}
+                </UnstyledButton>
               </List.Item>
             ))}
           </List>

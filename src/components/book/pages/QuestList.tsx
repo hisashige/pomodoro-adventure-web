@@ -17,7 +17,7 @@ export default React.forwardRef(({ number }: Props, ref: LegacyRef<HTMLDivElemen
   const { isRunning } = usePomodoroContext()
   const { questList, setQuestList, isEdit, setIsEdit } = useQuestContext()
   const [editQuestList, setEditQuestList] = useState(questList)
-  const aliveQuestList = useMemo(
+  const aliveEditQuestList = useMemo(
     () => editQuestList.filter((item) => !item.delete),
     [editQuestList]
   )
@@ -40,7 +40,6 @@ export default React.forwardRef(({ number }: Props, ref: LegacyRef<HTMLDivElemen
     const updatedQuestList = editQuestList.map((item) =>
       item.id === questId ? { ...item, delete: true } : item
     )
-    console.log('delete', updatedQuestList, questId)
     setEditQuestList(updatedQuestList)
   }
 
@@ -124,7 +123,7 @@ export default React.forwardRef(({ number }: Props, ref: LegacyRef<HTMLDivElemen
       <Page number={number} header="Quest List">
         <ButtonArea />
 
-        {aliveQuestList.map((quest) => {
+        {aliveEditQuestList.map((quest) => {
           const storedQuest = questList.find((fixQuest) => fixQuest.id === quest.id)
           return (
             <QuestItem
@@ -138,7 +137,7 @@ export default React.forwardRef(({ number }: Props, ref: LegacyRef<HTMLDivElemen
           )
         })}
 
-        {isEdit && aliveQuestList.length < 5 && (
+        {isEdit && aliveEditQuestList.length < 5 && (
           <Group position="right" pr={30}>
             <ActionIcon variant="filled" radius="lg" onClick={handleAddQuest}>
               <IconPlus />

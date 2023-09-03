@@ -1,4 +1,4 @@
-import { createContext, useContext, ReactNode, useState, useEffect } from 'react'
+import { createContext, useContext, ReactNode, useState, useEffect, useMemo } from 'react'
 
 export interface Quest {
   id: number
@@ -13,6 +13,7 @@ type QuestContext = {
   setSelectedQuestId: React.Dispatch<React.SetStateAction<number | null>>
   isEdit: boolean
   setIsEdit: React.Dispatch<React.SetStateAction<boolean>>
+  aliveQuestList: Quest[]
 }
 
 const defaultQuestContext = {
@@ -22,6 +23,7 @@ const defaultQuestContext = {
   setSelectedQuestId: () => {},
   isEdit: false,
   setIsEdit: () => {},
+  aliveQuestList: [],
 }
 
 const getInitialQuestList = () => {
@@ -40,6 +42,7 @@ export const QuestProvider = ({ children }: Props) => {
     defaultQuestContext.selectedQuestId
   )
   const [isEdit, setIsEdit] = useState(false)
+  const aliveQuestList = useMemo(() => questList.filter((item) => !item.delete), [questList])
 
   useEffect(() => {
     localStorage.setItem('questList', JSON.stringify(questList))
@@ -54,6 +57,7 @@ export const QuestProvider = ({ children }: Props) => {
         setSelectedQuestId,
         isEdit,
         setIsEdit,
+        aliveQuestList,
       }}
     >
       {children}

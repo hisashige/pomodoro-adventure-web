@@ -1,4 +1,5 @@
 import React, { LegacyRef } from 'react'
+import { Image } from '@mantine/core'
 import Page from '../layouts/Page'
 import Timer from '../parts/pomodoro/Timer'
 
@@ -9,10 +10,7 @@ export default React.forwardRef(({ number }: Props, ref: LegacyRef<HTMLDivElemen
   return (
     <div className="page" ref={ref}>
       <Page number={number} header="Pomodoro   Field">
-        <div
-          className="page-image"
-          style={{ backgroundImage: 'url(images/html/monster.gif)' }}
-        ></div>
+        <Image src="images/html/monster.gif"></Image>
         <div className="page-text">
           <Timer></Timer>
         </div>
