@@ -2,6 +2,7 @@ import { createContext, useContext, ReactNode, useState, useEffect } from 'react
 import { useQuestContext } from './QuestContext'
 import { now } from '../libs/dateUtils'
 import { createId } from '../libs/dataUtils'
+import { POMODORO_TIME } from '../consts'
 
 export interface Log {
   id: number
@@ -9,6 +10,7 @@ export interface Log {
   enemy: string
   done: boolean
   startTime: string
+  minutes: number
 }
 type LogConxtex = {
   enemy: string
@@ -56,6 +58,7 @@ export const LogProvider = ({ children }: Props) => {
         enemy: enemy,
         done: false,
         startTime: now(),
+        minutes: 0,
       }
       const updatedLogs = structuredClone(logs)
       updatedLogs.push(log)
@@ -65,7 +68,9 @@ export const LogProvider = ({ children }: Props) => {
 
   const doneLog = () => {
     const updatedLog = logs.map((item) =>
-      item.id === targetLogId ? { ...item, done: true } : item
+      item.id === targetLogId
+        ? { ...item, done: true, minutes: Math.round(POMODORO_TIME / 60) }
+        : item
     )
     setLogs(updatedLog)
     setTargetLogId(null)

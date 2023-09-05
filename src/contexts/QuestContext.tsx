@@ -3,7 +3,7 @@ import { createContext, useContext, ReactNode, useState, useEffect, useMemo } fr
 export interface Quest {
   id: number
   name: string
-  elapsedMinutes: number
+  totalMinutes: number
   delete: boolean
 }
 type QuestContext = {

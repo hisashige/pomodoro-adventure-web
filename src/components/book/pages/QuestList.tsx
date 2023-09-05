@@ -45,7 +45,7 @@ export default React.forwardRef(({ number }: Props, ref: LegacyRef<HTMLDivElemen
 
   const handleAddQuest = () => {
     const newQuestId = createId(editQuestList)
-    const newQuest: Quest = { id: newQuestId, name: '', elapsedMinutes: 0, delete: false }
+    const newQuest: Quest = { id: newQuestId, name: '', totalMinutes: 0, delete: false }
     setEditQuestList([...editQuestList, newQuest])
   }
 

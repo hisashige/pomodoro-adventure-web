@@ -10,5 +10,5 @@ export const createId = (items: Item[]): number => {
 }
 
 export const level = (quest: Quest): number => {
-  return Math.round(quest.elapsedMinutes / (POMODORO_TIME / 60)) + 1
+  return Math.round(quest.totalMinutes / (POMODORO_TIME / 60)) + 1
 }

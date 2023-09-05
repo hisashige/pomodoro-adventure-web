@@ -42,8 +42,8 @@ export default function Timer() {
     const targetIndex = questList.findIndex((item) => item.id === selectedQuestId)
     if (targetIndex !== -1) {
       const updatedQuestList = structuredClone(questList)
-      updatedQuestList[targetIndex].elapsedMinutes =
-        updatedQuestList[targetIndex].elapsedMinutes + Math.round(POMODORO_TIME / 60)
+      updatedQuestList[targetIndex].totalMinutes =
+        updatedQuestList[targetIndex].totalMinutes + Math.round(POMODORO_TIME / 60)
       setQuestList(updatedQuestList)
       doneLog()
     } else {
