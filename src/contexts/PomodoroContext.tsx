@@ -1,17 +1,16 @@
-import { createContext, useContext, ReactNode, useState } from 'react'
+import { createContext, useContext, ReactNode, useState, useMemo } from 'react'
 
-enum TimerStatus {
+export enum TimerStatus {
   Waiting = 'waiting',
   Playing = 'playing',
   Paused = 'paused',
   Finished = 'finished',
-  CountDown = 'countDown',
+  CountStart = 'CountStart',
   FadeOut = 'fadeOut',
 }
 
 type PomodoroContext = {
   isRunning: boolean
-  setIsRunning: React.Dispatch<React.SetStateAction<boolean>>
   status: TimerStatus
   setStatus: React.Dispatch<React.SetStateAction<TimerStatus>>
   volume: number
@@ -20,7 +19,6 @@ type PomodoroContext = {
 
 const defaultPomodoroContext = {
   isRunning: false,
-  setIsRunning: () => {},
   status: TimerStatus.Waiting,
   setStatus: () => {},
   volume: 20,
@@ -33,15 +31,16 @@ interface Props {
   children: ReactNode
 }
 export const PomodoroProvider = ({ children }: Props) => {
-  const [isRunning, setIsRunning] = useState(defaultPomodoroContext.isRunning)
   const [status, setStatus] = useState(defaultPomodoroContext.status)
   const [volume, setVolume] = useState<number>(defaultPomodoroContext.volume)
+  const isRunning = useMemo(() => {
+    return !(status === TimerStatus.Waiting || status === TimerStatus.Finished)
+  }, [status])
 
   return (
     <PomodoroContext.Provider
       value={{
         isRunning,
-        setIsRunning,
         status,
         setStatus,
         volume,

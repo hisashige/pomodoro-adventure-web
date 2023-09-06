@@ -11,8 +11,9 @@ import {
   Button,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import { IconBrandTwitter, IconBrandYoutube, IconBrandInstagram } from '@tabler/icons-react'
+import { IconBrandX } from '@tabler/icons-react'
 import useFlipPage from '../../hooks/useFlipPage'
+import { TWITTER_ACCOUNT } from '../../consts'
 
 const useStyles = createStyles((theme) => ({
   inner: {
@@ -130,15 +131,11 @@ export default function HeaderMiddle() {
           </Group>
         </a>
         <Group spacing={0} className={classes.social} position="right" noWrap>
-          <ActionIcon size="lg">
-            <IconBrandTwitter size="1.1rem" stroke={1.5} />
-          </ActionIcon>
-          <ActionIcon size="lg">
-            <IconBrandYoutube size="1.1rem" stroke={1.5} />
-          </ActionIcon>
-          <ActionIcon size="lg">
-            <IconBrandInstagram size="1.1rem" stroke={1.5} />
-          </ActionIcon>
+          <a href={TWITTER_ACCOUNT} target="_blank" rel="noopener noreferrer">
+            <ActionIcon size="lg" color="dark">
+              <IconBrandX size="1.1rem" stroke={1.5} />
+            </ActionIcon>
+          </a>
         </Group>
       </Container>
     </Header>

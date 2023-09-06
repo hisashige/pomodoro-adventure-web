@@ -3,43 +3,44 @@ import { Center, Grid, Slider, Text } from '@mantine/core'
 import { IconGripHorizontal } from '@tabler/icons-react'
 import SelectSound from './SelectSound'
 import { SOUNDS } from '../../../../consts'
-import { usePomodoroContext } from '../../../../contexts/PomodoroContext'
+import { TimerStatus, usePomodoroContext } from '../../../../contexts/PomodoroContext'
 import { getHowl } from '../../../../libs/howler'
 
-interface Props {
-  playing: boolean
-  isFadeOut: boolean
-  isFinished: boolean
-}
-const Player = ({ playing, isFadeOut, isFinished }: Props) => {
+const Player = () => {
+  const { status } = usePomodoroContext()
   const { volume, setVolume } = usePomodoroContext()
   const [sound, setSound] = useState(SOUNDS[0].value)
   const [howl, setHowl] = useState(getHowl(sound, volume))
   useEffect(() => {
-    if (playing) {
-      howl.volume(volume / 100)
-      howl.play()
-    } else {
-      howl.pause()
+    switch (status) {
+      case TimerStatus.Playing:
+        howl.volume(volume / 100)
+        howl.play()
+        break
+      case TimerStatus.Paused:
+        howl.pause()
+        break
+      case TimerStatus.Finished:
+        howl.stop()
+        break
+      case TimerStatus.FadeOut:
+        howl.fade(volume / 100, 0, 3000)
+        break
+      default:
+        break
     }
-  }, [playing])
+  }, [status])
   useEffect(() => {
-    howl.fade(volume / 100, 0, 3000)
-  }, [isFadeOut])
-  useEffect(() => {
-    if (isFinished) howl.stop()
-  }, [isFinished])
-  useEffect(() => {
-    if (playing) howl.stop()
+    if (TimerStatus.Playing) howl.stop()
     howl.unload()
     setHowl(getHowl(sound, volume))
   }, [sound])
   useEffect(() => {
+    if (status === TimerStatus.Playing) howl.play()
+  }, [howl])
+  useEffect(() => {
     howl.volume(volume / 100)
   }, [volume])
-  useEffect(() => {
-    if (playing) howl.play()
-  }, [howl])
 
   const handleChange = (value: number) => {
     setVolume(value)

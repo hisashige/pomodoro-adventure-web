@@ -20,3 +20,32 @@ export const SOUNDS = [
     description: 'エモくなりたい時に。',
   },
 ]
+
+export const WAITING_IMGS = ['castle.gif', 'nature.gif', 'spring.gif']
+export const PLAYING_IMGS = [
+  'monster.gif',
+  'witch.gif',
+  'bird.gif',
+  'asuka.gif',
+  'clock.gif',
+  'monster.gif',
+]
+export const PAUSED_IMGS = ['bounce.gif', 'dog.gif', 'frog.gif', 'lonely.gif']
+export const FINISHED_IMGS = [
+  'goodjob.gif',
+  'penguin.gif',
+  'rabbit.gif',
+  'star.gif',
+  'thumbs-up.gif',
+]
+
+export const TWITTER_ACCOUNT = 'https://twitter.com/hisasshii'
+
+export const GTM_INFO = {
+  development: {
+    gtmId: 'GTM-5TC6MXFJ',
+    auth: 'gqlwhdzjeKMI6mXAUPybRQ',
+    preview: 'env-3',
+  },
+  production: { gtmId: 'GTM-5TC6MXFJ', auth: 'wH-Jx_MKDWjayKhvhDajpg', preview: 'env-1' },
+}

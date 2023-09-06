@@ -20,7 +20,6 @@ interface MyChartProps {
 }
 
 const MyChart = ({ data, xAxisLabel }: MyChartProps) => {
-  console.log(data)
   return (
     <ResponsiveContainer width="100%" height="100%">
       <BarChart width={500} height={300} data={data} maxBarSize={25}>
