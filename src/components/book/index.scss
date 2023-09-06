@@ -1,7 +1,8 @@
 .page {
   padding: 20px;
 
-  background-color: hsl(35, 55, 98);
+  background-image: url('images/pageback.jpeg');
+  background-size: cover;
   color: hsl(35, 35, 35);
   border: solid 1px hsl(35, 20, 70);
 
@@ -47,15 +48,10 @@
   }
 
   &.page-cover {
-    background-color: hsl(35, 45, 80);
-    color: hsl(35, 35, 35);
+    background-image: url('images/bookcover.jpeg');
+    background-size: 100% 100%;
+    color: white;
     border: solid 1px hsl(35, 20, 50);
-
-    h2 {
-      text-align: center;
-      padding-top: 50%;
-      font-size: 210%;
-    }
 
     &.page-cover-top {
       box-shadow:
@@ -69,4 +65,10 @@
         10px 0 8px 0px rgba(0, 0, 0, 0.4);
     }
   }
+}
+
+.recharts-container {
+  background-color: #fff;
+  border: 0.0625rem solid #dee2e6;
+  border-radius: 1%;
 }

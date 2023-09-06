@@ -31,7 +31,9 @@ export default React.forwardRef(({ number }: Props, ref: LegacyRef<HTMLDivElemen
   }, [questList, dispDeletedQuest])
 
   useEffect(() => {
-    setFilteredLogs(logs.filter((log) => selectValues.includes(log.questId.toString())))
+    let filteredLogs = logs.filter((log) => selectValues.includes(log.questId.toString()))
+    filteredLogs = filteredLogs.sort((a, b) => b.id - a.id)
+    setFilteredLogs(filteredLogs)
   }, [selectValues, dispDeletedQuest])
 
   const handleSelectsChange = (values: string[]) => {

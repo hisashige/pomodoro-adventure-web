@@ -9,8 +9,12 @@ export default React.forwardRef(({ toNextPage }: Props, ref: LegacyRef<HTMLDivEl
   return (
     <div ref={ref} className={'page page-cover page-cover-top'}>
       <PageCover>
-        <Text size={50}>YOUR ADVENTURE</Text>
-        <Button onClick={toNextPage}>Press to Start</Button>
+        <Text size={40} align="center" style={{ fontFamily: 'Inknut Antiqua' }}>
+          This is your adventure
+        </Text>
+        <Button onClick={toNextPage} radius="xl" size="lg" style={{ width: '200px' }}>
+          Press to Start
+        </Button>
       </PageCover>
     </div>
   )

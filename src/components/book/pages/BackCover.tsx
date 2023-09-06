@@ -9,7 +9,9 @@ export default React.forwardRef(({ toPrevPage }: Props, ref: LegacyRef<HTMLDivEl
   return (
     <div ref={ref} className={'page page-cover page-cover-bottom'}>
       <PageCover>
-        <Text size={20}>© 2023 Hisashige Takahashi. All Rights Reserved.</Text>
+        <Text size={20} weight="bold">
+          © 2023 Hisashige Takahashi. All Rights Reserved.
+        </Text>
       </PageCover>
     </div>
   )

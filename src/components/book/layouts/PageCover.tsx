@@ -1,3 +1,4 @@
+import { Flex } from '@mantine/core'
 import React, { ReactNode } from 'react'
 
 type Props = {
@@ -5,9 +6,16 @@ type Props = {
 }
 const PageCover: React.FC<Props> = ({ children }: Props) => {
   return (
-    <div className="page-content">
-      <h2>{children}</h2>
-    </div>
+    <Flex
+      gap="md"
+      justify="center"
+      align="center"
+      direction="column"
+      wrap="wrap"
+      style={{ height: '100%' }}
+    >
+      {children}
+    </Flex>
   )
 }
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import {
   BarChart,
   Bar,
@@ -127,7 +127,7 @@ export default function ChartSwitcher({ logs }: Props) {
     <>
       <Flex style={{ height: '100%' }}>
         <MyChart data={chartData} xAxisLabel={xAxisLabel} />
-        <Flex justify="center" align="flex-start" direction="column" gap="sm" wrap="wrap">
+        <Flex justify="center" align="flex-start" direction="column" gap="sm" wrap="wrap" pr={5}>
           <Button
             onClick={() => setChartType('daily')}
             variant={chartType === 'daily' ? 'filled' : 'light'}

@@ -19,8 +19,12 @@ export default React.forwardRef(({ number }: Props, ref: LegacyRef<HTMLDivElemen
   return (
     <div className="page" ref={ref}>
       <Page number={number} header="Status">
-        <QuestRadar questsForRadar={questsForRadar} />
-        <TimesBar logs={logs} />
+        <div className="recharts-container" style={{ height: '40%', marginBottom: '10px' }}>
+          <QuestRadar questsForRadar={questsForRadar} />
+        </div>
+        <div className="recharts-container" style={{ height: '50%' }}>
+          <TimesBar logs={logs} />
+        </div>
       </Page>
     </div>
   )
