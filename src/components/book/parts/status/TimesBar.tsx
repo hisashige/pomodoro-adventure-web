@@ -26,7 +26,8 @@ const MyChart = ({ data, xAxisLabel }: MyChartProps) => {
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis
           dataKey="date"
-          tick={{ fontSize: 12, angle: -45, dy: -1 }}
+          angle={-45}
+          tick={{ fontSize: 12, dy: -1 }}
           interval={0}
           textAnchor="end"
           height={60}

@@ -5,7 +5,7 @@ import PageCover from '../layouts/PageCover'
 type Props = {
   toPrevPage: () => void
 }
-export default React.forwardRef(({ toPrevPage }: Props, ref: LegacyRef<HTMLDivElement>) => {
+export default React.forwardRef(({}: Props, ref: LegacyRef<HTMLDivElement>) => {
   return (
     <div ref={ref} className={'page page-cover page-cover-bottom'}>
       <PageCover>

@@ -1,7 +1,7 @@
-import { createContext, useContext, useRef, MutableRefObject, ReactNode, useState } from 'react'
+import { createContext, useContext, useRef, ReactNode, useState } from 'react'
 
 type BookContext = {
-  bookRef: MutableRefObject<null> | null
+  bookRef: React.MutableRefObject<any | null> | null
   page: number
   setPage: React.Dispatch<React.SetStateAction<number>>
   totalPage: number
@@ -28,7 +28,7 @@ interface Props {
   children: ReactNode
 }
 export const BookProvider = ({ children }: Props) => {
-  const bookRef = useRef(defaultBookContext.bookRef)
+  const bookRef = useRef<any | null>(defaultBookContext.bookRef)
   const [page, setPage] = useState(defaultBookContext.page)
   const [totalPage, setTotalPage] = useState(defaultBookContext.totalPage)
   const [orientation, setOrientation] = useState('portrait')
