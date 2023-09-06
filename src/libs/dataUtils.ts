@@ -1,4 +1,4 @@
-import { POMODORO_TIME } from '../consts'
+import { POMODORO_TIME } from '../consts/pomodoro'
 import { Quest } from '../contexts/QuestContext'
 
 interface Item {

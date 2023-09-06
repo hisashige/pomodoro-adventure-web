@@ -2,7 +2,7 @@ import { createContext, useContext, ReactNode, useState, useEffect } from 'react
 import { useQuestContext } from './QuestContext'
 import { now } from '../libs/dateUtils'
 import { createId } from '../libs/dataUtils'
-import { POMODORO_TIME } from '../consts'
+import { POMODORO_TIME } from '../consts/pomodoro'
 
 export interface Log {
   id: number

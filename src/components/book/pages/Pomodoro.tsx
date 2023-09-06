@@ -3,7 +3,7 @@ import { Image } from '@mantine/core'
 import Page from '../layouts/Page'
 import Timer from '../parts/pomodoro/Timer'
 import { TimerStatus, usePomodoroContext } from '../../../contexts/PomodoroContext'
-import { FINISHED_IMGS, PAUSED_IMGS, PLAYING_IMGS, WAITING_IMGS } from '../../../consts'
+import { FINISHED_IMGS, PAUSED_IMGS, PLAYING_IMGS, WAITING_IMGS } from '../../../consts/images'
 
 interface ImageUrls {
   [TimerStatus.Playing]: string
@@ -34,11 +34,11 @@ export default React.forwardRef(({ number }: Props, ref: LegacyRef<HTMLDivElemen
     if (status === TimerStatus.Waiting) {
       // Waiting画像は先に設定する
       const waitingIndex = Math.floor(Math.random() * WAITING_IMGS.length)
-      setImageUrl('images/pomodoro/waiting/' + WAITING_IMGS[waitingIndex])
+      setImageUrl(WAITING_IMGS[waitingIndex])
     } else if (status !== TimerStatus.CountStart && status !== TimerStatus.FadeOut) {
       // 状態が変われば表示画像を切り替える
       if (imageUrls) {
-        const url = 'images/pomodoro/' + status + '/' + imageUrls[status]
+        const url = imageUrls[status]
         setImageUrl(url)
       }
     }

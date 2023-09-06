@@ -13,7 +13,7 @@ import {
 import { useDisclosure } from '@mantine/hooks'
 import { IconBrandX } from '@tabler/icons-react'
 import useFlipPage from '../../hooks/useFlipPage'
-import { TWITTER_ACCOUNT } from '../../consts'
+import { TWITTER_ACCOUNT } from '../../consts/common'
 
 const useStyles = createStyles((theme) => ({
   inner: {

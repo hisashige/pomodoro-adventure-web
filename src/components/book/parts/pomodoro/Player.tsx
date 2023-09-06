@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Center, Grid, Slider, Text } from '@mantine/core'
 import { IconGripHorizontal } from '@tabler/icons-react'
 import SelectSound from './SelectSound'
-import { SOUNDS } from '../../../../consts'
+import { SOUNDS } from '../../../../consts/pomodoro'
 import { TimerStatus, usePomodoroContext } from '../../../../contexts/PomodoroContext'
 import { getHowl } from '../../../../libs/howler'
 

@@ -11,7 +11,7 @@ import { ModalsProvider } from '@mantine/modals'
 import { PomodoroProvider } from './contexts/PomodoroContext'
 import { LogProvider } from './contexts/LogContext'
 import { useEffect } from 'react'
-import { GTM_INFO } from './consts'
+import { GTM_INFO } from './consts/common'
 
 function App() {
   const os = useOs()

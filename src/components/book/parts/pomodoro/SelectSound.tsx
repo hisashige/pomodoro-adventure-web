@@ -1,6 +1,6 @@
 import { forwardRef } from 'react'
 import { Group, Avatar, Text, Select } from '@mantine/core'
-import { SOUNDS } from '../../../../consts'
+import { SOUNDS } from '../../../../consts/pomodoro'
 
 interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
   image: string

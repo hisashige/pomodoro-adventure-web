@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Text, Paper, Container, Button, Center } from '@mantine/core'
 import { useTimer } from 'react-timer-hook'
 import Player from './Player'
-import { POMODORO_TIME } from '../../../../consts'
+import { POMODORO_TIME } from '../../../../consts/pomodoro'
 import { useQuestContext } from '../../../../contexts/QuestContext'
 import { modals } from '@mantine/modals'
 import { notifications } from '@mantine/notifications'
@@ -10,6 +10,7 @@ import { IconX } from '@tabler/icons-react'
 import { TimerStatus, usePomodoroContext } from '../../../../contexts/PomodoroContext'
 import { getHowl } from '../../../../libs/howler'
 import { useLogContext } from '../../../../contexts/LogContext'
+import coundDown from '../../../../assets/sounds/countdown.mp3'
 
 export default function Timer() {
   const { questList, setQuestList, selectedQuestId, isEdit } = useQuestContext()
@@ -18,7 +19,7 @@ export default function Timer() {
   const [countNum, setCountNum] = useState(3)
 
   // カウントダウン音
-  const [howl] = useState(getHowl('countdown.mp3', volume))
+  const [howl] = useState(getHowl(coundDown, volume))
   useEffect(() => {
     if (status === TimerStatus.CountStart || status === TimerStatus.FadeOut) {
       howl.play()
