@@ -1,7 +1,7 @@
 .page {
   padding: 20px;
 
-  background-image: url('../../assets/images/pageback.jpeg');
+  background-color: #fffcf8;
   background-size: 100% 100%;
   color: hsl(35, 35, 35);
   border: solid 1px hsl(35, 20, 70);
@@ -48,7 +48,7 @@
   }
 
   &.page-cover {
-    background-image: url('../../assets/images/bookcover.jpeg');
+    background-image: url('images/bookcover.jpeg');
     background-size: 100% 100%;
     color: white;
     border: solid 1px hsl(35, 20, 50);
