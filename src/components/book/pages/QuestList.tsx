@@ -37,10 +37,20 @@ export default React.forwardRef(({ number }: Props, ref: LegacyRef<HTMLDivElemen
   }
 
   const handleDelete = (questId: number) => {
-    const updatedQuestList = editQuestList.map((item) =>
-      item.id === questId ? { ...item, delete: true } : item
-    )
-    setEditQuestList(updatedQuestList)
+    let updatedQuestList: Quest[] = []
+    if (questList.some((quest) => quest.id === questId)) {
+      // 既存のクエストの場合は削除フラグを立てる
+      // 名前を消して削除されようとした場合、名前を復活させる
+      const oldQuest = editQuestList.find((quest) => quest.id === questId)
+      const oldQuestName = oldQuest?.name || ''
+      updatedQuestList = editQuestList.map((item) =>
+        item.id === questId ? { ...item, name: oldQuestName, delete: true } : item
+      )
+    } else {
+      // 今追加したばかりのものであれば完全に削除
+      updatedQuestList = editQuestList.filter((quest) => quest.id !== questId)
+    }
+    if (updatedQuestList) setEditQuestList(updatedQuestList)
   }
 
   const handleAddQuest = () => {
