@@ -4,16 +4,16 @@ import {
   Group,
   ActionIcon,
   Container,
-  Burger,
   rem,
   Image,
   Text,
   Button,
+  Tooltip,
 } from '@mantine/core'
-import { useDisclosure } from '@mantine/hooks'
-import { IconBrandX } from '@tabler/icons-react'
+import { IconBrandX, IconHelp } from '@tabler/icons-react'
 import useFlipPage from '../../hooks/useFlipPage'
 import { TWITTER_ACCOUNT } from '../../consts/common'
+import { useTour } from '@reactour/tour'
 
 const useStyles = createStyles((theme) => ({
   inner: {
@@ -27,28 +27,12 @@ const useStyles = createStyles((theme) => ({
     },
   },
 
-  links: {
-    width: rem(260),
-
-    [theme.fn.smallerThan('sm')]: {
-      display: 'none',
-    },
-  },
-
   social: {
     width: rem(260),
 
     [theme.fn.smallerThan('sm')]: {
       width: 'auto',
       marginLeft: 'auto',
-    },
-  },
-
-  burger: {
-    marginRight: theme.spacing.md,
-
-    [theme.fn.largerThan('sm')]: {
-      display: 'none',
     },
   },
 
@@ -76,7 +60,6 @@ const useStyles = createStyles((theme) => ({
 }))
 
 export default function HeaderMiddle() {
-  const [opened, { toggle }] = useDisclosure(false)
   const { classes, cx } = useStyles()
 
   const { page, totalPage, toPage, toNextPage, toPrevPage } = useFlipPage()
@@ -108,11 +91,16 @@ export default function HeaderMiddle() {
     </Button>
   ))
 
+  const { setCurrentStep, setIsOpen } = useTour()
+  const startTour = () => {
+    setCurrentStep(0)
+    setIsOpen(true)
+  }
+
   return (
     <Header height={56}>
       <Container className={classes.inner}>
-        <Burger opened={opened} onClick={toggle} size="sm" className={classes.burger} />
-        <Group className={classes.links} spacing={5}>
+        <Group className="nav-button" spacing={5}>
           {items}
         </Group>
         <a
@@ -124,18 +112,30 @@ export default function HeaderMiddle() {
           }}
         >
           <Group spacing={5}>
-            <Image maw={50} mx="auto" radius="md" src="images/logo.png" alt="ポモニャン" />
+            <Image maw={50} mx="auto" radius="md" src="images/logo.jpg" alt="ポモニャン" />
             <Text size="xl" weight={500}>
               Pomodoro Adventure
             </Text>
           </Group>
         </a>
         <Group spacing={0} className={classes.social} position="right" noWrap>
-          <a href={TWITTER_ACCOUNT} target="_blank" rel="noopener noreferrer">
-            <ActionIcon size="lg" color="dark">
-              <IconBrandX size="1.1rem" stroke={1.5} />
-            </ActionIcon>
-          </a>
+          {page === 1 && (
+            <Tooltip label="ツアーを開始する">
+              <a onClick={startTour} target="_blank" rel="noopener noreferrer">
+                <ActionIcon size="lg" color="dark">
+                  <IconHelp size="1.1rem" stroke={1.5} />
+                </ActionIcon>
+              </a>
+            </Tooltip>
+          )}
+
+          <Tooltip label="制作者のX">
+            <a href={TWITTER_ACCOUNT} target="_blank" rel="noopener noreferrer">
+              <ActionIcon size="lg" color="dark">
+                <IconBrandX size="1.1rem" stroke={1.5} />
+              </ActionIcon>
+            </a>
+          </Tooltip>
         </Group>
       </Container>
     </Header>

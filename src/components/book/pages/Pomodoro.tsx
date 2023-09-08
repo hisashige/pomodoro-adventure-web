@@ -47,8 +47,8 @@ export default React.forwardRef(({ number }: Props, ref: LegacyRef<HTMLDivElemen
   return (
     <div className="page" ref={ref}>
       <Page number={number} header="Pomodoro   Field">
-        <Image radius={5} height={400} src={imageUrl}></Image>
-        <div className="page-text">
+        <Image className="image-area" radius={5} height={400} src={imageUrl}></Image>
+        <div className="page-text timer-area">
           <Timer></Timer>
         </div>
       </Page>

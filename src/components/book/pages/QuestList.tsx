@@ -131,29 +131,31 @@ export default React.forwardRef(({ number }: Props, ref: LegacyRef<HTMLDivElemen
   return (
     <div className="page" ref={ref}>
       <Page number={number} header="Quest List">
-        <ButtonArea />
+        <div className="quest-area">
+          <ButtonArea />
 
-        {aliveEditQuestList.map((quest) => {
-          const storedQuest = questList.find((fixQuest) => fixQuest.id === quest.id)
-          return (
-            <QuestItem
-              key={quest.id}
-              storedQuest={storedQuest}
-              editQuest={quest}
-              onChangeName={handleNameChange}
-              onDelete={handleDelete}
-              isEdit={isEdit}
-            />
-          )
-        })}
+          {aliveEditQuestList.map((quest) => {
+            const storedQuest = questList.find((fixQuest) => fixQuest.id === quest.id)
+            return (
+              <QuestItem
+                key={quest.id}
+                storedQuest={storedQuest}
+                editQuest={quest}
+                onChangeName={handleNameChange}
+                onDelete={handleDelete}
+                isEdit={isEdit}
+              />
+            )
+          })}
 
-        {isEdit && aliveEditQuestList.length < 5 && (
-          <Group position="right" pr={30}>
-            <ActionIcon variant="filled" radius="lg" onClick={handleAddQuest}>
-              <IconPlus />
-            </ActionIcon>
-          </Group>
-        )}
+          {isEdit && aliveEditQuestList.length < 5 && (
+            <Group position="right" pr={30}>
+              <ActionIcon variant="filled" radius="lg" onClick={handleAddQuest}>
+                <IconPlus />
+              </ActionIcon>
+            </Group>
+          )}
+        </div>
 
         {!isEdit && <Enemy isRunning={isRunning}></Enemy>}
       </Page>

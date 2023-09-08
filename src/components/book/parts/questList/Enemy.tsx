@@ -30,7 +30,7 @@ export default function Enemy({ isRunning }: Props) {
   }, [logs])
 
   return (
-    <Paper withBorder radius="md" p="md" m="xs">
+    <Paper className="enemy-area" withBorder radius="md" p="md" m="xs">
       <Text color="red" ta="center" fz="xl" fw={700}>
         ENEMY
       </Text>

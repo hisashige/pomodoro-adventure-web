@@ -1,7 +1,8 @@
-import { MantineProvider } from '@mantine/core'
+import { MantineProvider, Image, Step } from '@mantine/core'
 import { useOs } from '@mantine/hooks'
 import TagManager from 'react-gtm-module'
-import './App.css'
+import { TourProvider } from '@reactour/tour'
+import './App.scss'
 import Book from './components/book'
 import Header from './components/common/Header'
 import { BookProvider } from './contexts/BookContext'
@@ -12,6 +13,7 @@ import { PomodoroProvider } from './contexts/PomodoroContext'
 import { LogProvider } from './contexts/LogContext'
 import { useEffect } from 'react'
 import { GTM_INFO } from './consts/common'
+import { steps } from './components/common/tour/StepContent'
 
 function App() {
   const os = useOs()
@@ -42,8 +44,10 @@ function App() {
           <QuestProvider>
             <LogProvider>
               <PomodoroProvider>
-                <Header></Header>
-                {isSupportedOS ? <Book></Book> : 'サポート外のOSです。PCで開いてね。'}
+                <TourProvider steps={steps}>
+                  <Header></Header>
+                  {isSupportedOS ? <Book></Book> : 'サポート外のOSです。PCで開いてね。'}
+                </TourProvider>
               </PomodoroProvider>
             </LogProvider>
           </QuestProvider>

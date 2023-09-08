@@ -12,7 +12,13 @@ export default React.forwardRef(({ toNextPage }: Props, ref: LegacyRef<HTMLDivEl
         <Text size={40} align="center" style={{ fontFamily: 'Inknut Antiqua' }}>
           This is your adventure
         </Text>
-        <Button onClick={toNextPage} radius="xl" size="lg" style={{ width: '200px' }}>
+        <Button
+          onClick={toNextPage}
+          radius="xl"
+          size="lg"
+          style={{ width: '200px' }}
+          className="init-button"
+        >
           Press to Start
         </Button>
       </PageCover>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import HTMLFlipBook from 'react-pageflip'
 import './index.scss'
 import useFlipPage from '../../hooks/useFlipPage'
@@ -8,10 +8,18 @@ import Pomodoro from './pages/Pomodoro'
 import QuestList from './pages/QuestList'
 import Log from './pages/Log'
 import Status from './pages/Status'
+import { useTour } from '@reactour/tour'
+import { getIsOverTour } from '../common/tour/StepContent'
 
 const Book: React.FC = () => {
-  const { bookRef, toNextPage, toPrevPage, onPage, onChangeOrientation, onChangePageState } =
+  const { bookRef, page, toNextPage, toPrevPage, onPage, onChangeOrientation, onChangePageState } =
     useFlipPage()
+
+  const { setIsOpen } = useTour()
+  useEffect(() => {
+    const isOverTour = getIsOverTour()
+    if (!isOverTour && page === 1) setIsOpen(true)
+  }, [page])
 
   return (
     <div>
@@ -20,7 +28,6 @@ const Book: React.FC = () => {
         <HTMLFlipBook
           width={window.innerWidth / 2}
           height={window.innerHeight - 56}
-          size="stretch"
           style={{ backgroundImage: 'url(images/background.jpg)', backgroundSize: '100% 100%' }}
           maxShadowOpacity={0.5}
           showCover={true}
