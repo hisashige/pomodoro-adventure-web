@@ -14,6 +14,7 @@ import { IconBrandX, IconHelp } from '@tabler/icons-react'
 import useFlipPage from '../../hooks/useFlipPage'
 import { TWITTER_ACCOUNT } from '../../consts/common'
 import { useTour } from '@reactour/tour'
+import { useOs } from '@mantine/hooks'
 
 const useStyles = createStyles((theme) => ({
   inner: {
@@ -60,6 +61,9 @@ const useStyles = createStyles((theme) => ({
 }))
 
 export default function HeaderMiddle() {
+  const os = useOs()
+  const isSupportedOS = os === 'windows' || os === 'macos'
+
   const { classes, cx } = useStyles()
 
   const { page, totalPage, toPage, toNextPage, toPrevPage } = useFlipPage()
@@ -100,9 +104,11 @@ export default function HeaderMiddle() {
   return (
     <Header height={56}>
       <Container className={classes.inner}>
-        <Group className="nav-button" spacing={5}>
-          {items}
-        </Group>
+        {isSupportedOS && (
+          <Group className="nav-button" spacing={5}>
+            {items}
+          </Group>
+        )}
         <a
           href=""
           className={cx(classes.link)}
@@ -112,7 +118,7 @@ export default function HeaderMiddle() {
           }}
         >
           <Group spacing={5}>
-            <Image maw={50} mx="auto" radius="md" src="images/logo.jpg" alt="ポモニャン" />
+            <Image maw={50} mx="auto" radius="md" src="images/logo.jpg" alt="ポモにゃん" />
             <Text size="xl" weight={500}>
               Pomodoro Adventure
             </Text>
@@ -129,7 +135,7 @@ export default function HeaderMiddle() {
             </Tooltip>
           )}
 
-          <Tooltip label="制作者のX">
+          <Tooltip label="ご要望などはこちら">
             <a href={TWITTER_ACCOUNT} target="_blank" rel="noopener noreferrer">
               <ActionIcon size="lg" color="dark">
                 <IconBrandX size="1.1rem" stroke={1.5} />
