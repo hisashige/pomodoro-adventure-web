@@ -28,6 +28,7 @@ const Book: React.FC = () => {
         <HTMLFlipBook
           width={window.innerWidth / 2}
           height={window.innerHeight - 56}
+          size="stretch"
           style={{ backgroundImage: 'url(images/background.jpg)', backgroundSize: '100% 100%' }}
           maxShadowOpacity={0.5}
           showCover={true}
