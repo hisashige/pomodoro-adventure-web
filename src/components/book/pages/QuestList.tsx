@@ -157,7 +157,7 @@ export default React.forwardRef(({ number }: Props, ref: LegacyRef<HTMLDivElemen
           )}
         </div>
 
-        {!isEdit && <Enemy isRunning={isRunning}></Enemy>}
+        <Enemy isRunning={isRunning}></Enemy>
       </Page>
     </div>
   )

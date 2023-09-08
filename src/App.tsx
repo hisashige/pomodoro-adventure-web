@@ -44,7 +44,15 @@ function App() {
           <QuestProvider>
             <LogProvider>
               <PomodoroProvider>
-                <TourProvider steps={steps}>
+                <TourProvider
+                  steps={steps}
+                  styles={{
+                    popover: (base) => ({
+                      ...base,
+                      borderRadius: '20px',
+                    }),
+                  }}
+                >
                   <Header></Header>
                   {isSupportedOS ? <Book></Book> : 'サポート外のOSです。PCで開いてね。'}
                 </TourProvider>
