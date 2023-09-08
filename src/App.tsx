@@ -1,4 +1,4 @@
-import { MantineProvider, Image, Step } from '@mantine/core'
+import { MantineProvider } from '@mantine/core'
 import { useOs } from '@mantine/hooks'
 import TagManager from 'react-gtm-module'
 import { TourProvider } from '@reactour/tour'
